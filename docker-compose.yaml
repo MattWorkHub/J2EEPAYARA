@@ -1,0 +1,25 @@
+version: '3.8'  # Specify the version of the Compose file format
+
+services:
+  web:
+    build: .
+    ports:
+      - "8082:8081"
+    environment:
+      - PAYARA_MICRO_DB_URL=jdbc:postgresql://postgres_db:5432/postgres
+      - PAYARA_MICRO_DB_USER=postgres
+      - PAYARA_MICRO_DB_PASSWORD=postgres
+    command: >
+      java -jar /opt/payara/payara-micro.jar
+      --deploy /opt/webapp/myapp.war
+      --contextRoot /myapp
+      --port 8081
+
+  postgres_db:
+    image: postgres:15
+    ports:
+      - "5431:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
